@@ -1,6 +1,10 @@
 const express = require('express');
 const MoviesService = require("../services/movies");
 
+const { movieIdSchema, createMovieSchema, updateMovieSchema } = require('../utils/schemas/movies');
+
+const validationHanlder = require('../utils/middleware/validationHandler');
+
 function moviesApi(app) {
     const router = express.Router();
     app.use('/api/movies', router);
@@ -11,7 +15,7 @@ function moviesApi(app) {
         const { tags } = req.query;
         try {
             const movies = await moviesService.getMovies({ tags })
-            
+
             // throw new Error("Error gettings movies")
 
             res.status(200).json({
@@ -22,7 +26,7 @@ function moviesApi(app) {
             next(error)
         }
     })
-    router.get("/:movieId", async (req, res, next) => {
+    router.get("/:movieId", validationHanlder({ movieId: movieIdSchema }, 'params'), async (req, res, next) => {
         const { movieId } = req.params
         try {
             const movie = await moviesService.getMovie({ movieId })
@@ -35,7 +39,7 @@ function moviesApi(app) {
             next(error)
         }
     })
-    router.post("/", async (req, res, next) => {
+    router.post("/", validationHanlder(createMovieSchema), async (req, res, next) => {
         const { body: movie } = req;
         try {
             const createMovie = await moviesService.createMovie({ movie })
@@ -48,7 +52,7 @@ function moviesApi(app) {
             next(error)
         }
     })
-    router.put("/:movieId", async (req, res, next) => {
+    router.put("/:movieId", validationHanlder({ movieId: movieIdSchema }, 'params'), validationHanlder(updateMovieSchema), async (req, res, next) => {
         const { movieId } = req.params;
         const { body: movie } = req;
         try {
@@ -65,7 +69,7 @@ function moviesApi(app) {
             next(error)
         }
     })
-    router.delete("/:movieId", async (req, res, next) => {
+    router.delete("/:movieId", validationHanlder({ movieId: movieIdSchema }, 'params'), async (req, res, next) => {
         const { movieId } = req.params;
         try {
             const deleteMovies = await moviesService.deleteMovie({ movieId });
