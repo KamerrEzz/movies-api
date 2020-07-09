@@ -12,7 +12,7 @@ function moviesApi(app) {
         try {
             const movies = await moviesService.getMovies({ tags })
             
-            // throw new Error("Error gettings movies")
+            throw new Error("Error gettings movies")
 
             res.status(200).json({
                 data: movies,
