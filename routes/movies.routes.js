@@ -1,13 +1,16 @@
 const express = require('express');
-const { moviesMock } = require('../utils/mocks/movies');
+const MoviesService = require("../services/movies");
 
 function moviesApi(app){
     const router = express.Router();
     app.use('/api/movies', router);
 
+    const moviesService = new MoviesService()
+
     router.get("/", async (req, res, next) => {
+        const { tags } = req.query;
         try {
-            const movies = await Promise.resolve(moviesMock);
+            const movies = await moviesService.getMovies({ tags })
         
             res.status(200).json({
                 data: movies,
