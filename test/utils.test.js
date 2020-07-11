@@ -3,7 +3,7 @@ const buildMessage = require('../utils/buildMessage');
 
 
 
-describe.only('utils - buildMessage', () => {
+describe('utils - buildMessage', () => {
     describe('when receives na entity and action', () => {
         it('should return the respective message', () => {
             const result = buildMessage('movie', 'create');

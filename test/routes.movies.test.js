@@ -29,6 +29,11 @@ describe('routes - movies', () => {
             })
         })
     })
+    describe('POST /movies', () => {
+        it('should respond with status 200', (done) => {
+            request.post('/api/movies').expect(201, done);
+        })
+    })
 })
 
 
